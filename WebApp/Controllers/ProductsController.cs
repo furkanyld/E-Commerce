@@ -56,8 +56,8 @@ namespace WebApp.Controllers
             return await productList;
         }
 
-        [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct(int id, ProductDTO productDTO)
+        [HttpPut("ModifyProduct")]
+        public async Task<IActionResult> ModifyProduct(int id, ProductDTO productDTO)
         {
             if (id != productDTO.Id)
             {
@@ -118,55 +118,6 @@ namespace WebApp.Controllers
                                           .ToListAsync();
             return Ok(products);
         }
-        [HttpPut("ProductModify")]
-        public async Task<IActionResult> ProductModify(int id, ProductDTO productDTO)
-        {
-            if (id != productDTO.Id)
-            {
-                return BadRequest("Product ID mismatch.");
-            }
-
-            var existingProduct = await _context.Products.FindAsync(id);
-            if (existingProduct == null)
-            {
-                return NotFound();
-            }
-
-            if (productDTO.Name != null)
-            {
-                existingProduct.Name = productDTO.Name;
-            }
-            if (productDTO.Price != 0)
-            {
-                existingProduct.Price = productDTO.Price;
-            }
-            if (productDTO.Quantity != 0)
-            {
-                existingProduct.Quantity = productDTO.Quantity;
-            }
-            if (productDTO.Discount != 0)
-            {
-                existingProduct.Discount = productDTO.Discount;
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
-        }
-
     }
 }
 

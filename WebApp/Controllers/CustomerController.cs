@@ -31,7 +31,6 @@ namespace WebApp.Controllers
             return Ok(_customers);
         }
 
-
         [HttpPost("AddCustomer")]
         public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
         {
@@ -39,6 +38,7 @@ namespace WebApp.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(CreateCustomer), new { id = customer.Id }, customer);
         }
+
         [HttpDelete("DeleteCostumer")]
         public IActionResult DeleteCustomer(int id)
         {
@@ -53,7 +53,25 @@ namespace WebApp.Controllers
 
             return Ok(new { Message = $"Customer with Id = {id} has been deleted." });
         }
+
+        [HttpDelete("DeleteAllCustomers")]
+        public async Task<IActionResult> DeleteAllCustomers()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            if (customers == null || customers.Count == 0)
+            {
+                return NotFound(new { Message = "No customers found to delete." });
+            }
+
+            _context.Customers.RemoveRange(customers);
+            await _context.SaveChangesAsync();
+
+            // Id reset
+            await _context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Customers', RESEED, 0)");
+
+            return Ok(new { Message = "All customers have been deleted." });
+        }
         //[HttpGet("GetCustomers")]
-       
+
     }
 }
