@@ -71,7 +71,13 @@ namespace WebApp.Controllers
 
             return Ok(new { Message = "All customers have been deleted." });
         }
-        //[HttpGet("GetCustomers")]
+
+        [HttpGet("GetCustomers")]
+        public async Task<List<Models.Customer>> GetCustomers()
+        {
+            var customerList = _context.Customers.ToListAsync();
+            return await customerList;
+        }
 
     }
 }
