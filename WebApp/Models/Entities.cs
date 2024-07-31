@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace WebApp.Models;
+namespace WebApp.API.Models;
 
 public class ECommerceDbContext : DbContext
 {
@@ -8,7 +8,7 @@ public class ECommerceDbContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options)
             : base(options)
-    {
+    { 
     }
 }
 public class Product
@@ -32,6 +32,7 @@ public class Product
         Category = category;
         Manufacturer = manufacturer;
     }
+    public Product() { }
 }
 
 public class Customer

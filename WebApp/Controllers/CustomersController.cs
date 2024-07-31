@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Models;
+using WebApp.API.Models;
 
-namespace WebApp.Controllers
+namespace WebApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly ECommerceDbContext _context;
-        public CustomerController(ECommerceDbContext context)
+        public CustomersController(ECommerceDbContext context)
         {
             _context = context;
         }
