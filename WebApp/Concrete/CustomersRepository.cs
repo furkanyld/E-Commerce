@@ -5,6 +5,8 @@ using WebApp.API.Models;
 using WebApp.API.Abstract;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using WebApp.API.DTOs;
 
 
 namespace WebApp.API.Concrete
@@ -12,10 +14,12 @@ namespace WebApp.API.Concrete
     public class CustomersRepository : ICustomersRepository
     {
         private readonly ECommerceDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomersRepository(ECommerceDbContext context)
+        public CustomersRepository(ECommerceDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Customer> CreateCustomer(Customer customer)
@@ -72,6 +76,19 @@ namespace WebApp.API.Concrete
         public async Task<List<API.Models.Customer>> GetCustomers()
         {
             return await _context.Customers.ToListAsync();
+        }
+        public async Task<IActionResult> ModifyCustomer(int id, CustomerDTO customerDTO)
+        {
+            var existingCustomer = await _context.Customers.FindAsync(id);
+            if (existingCustomer == null)
+            {
+                return new NotFoundResult();
+            }
+
+            _mapper.Map(customerDTO, existingCustomer);
+            await _context.SaveChangesAsync();
+            
+            return new NoContentResult();
         }
     }
 }

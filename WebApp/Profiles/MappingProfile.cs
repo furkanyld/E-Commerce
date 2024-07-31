@@ -10,6 +10,15 @@ namespace WebApp.API.Profiles
         {
             CreateMap<Product, ProductDTO>();
             CreateMap<ProductDTO, Product>();
+
+            CreateMap<Product, ModifyProductDTO>();
+            CreateMap<ModifyProductDTO, Product>();
+
+            // Customer.FirstName = CustomerDTO.Firstname
+            SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
+            DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
         }
     }
 }

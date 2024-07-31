@@ -30,11 +30,6 @@ namespace WebApp.API.Controllers
         {
             var product = _mapper.Map<Product>(productDTO);
             var createdProduct = await _productsRepository.CreateProduct(product);
-
-            if (createdProduct is null)
-            {
-                return BadRequest();
-            }
             var createdProductDTO = _mapper.Map<ProductDTO>(createdProduct);
             return CreatedAtAction(nameof(GetProductById), new { id = createdProductDTO.Id }, createdProductDTO);
         }
@@ -60,10 +55,10 @@ namespace WebApp.API.Controllers
             return Ok(products);
         }
 
-        [HttpPut("UpdateProduct/{id}")]
-        public async Task<IActionResult> ModifyProduct(int id, ProductDTO productDTO)
+        [HttpPut("ModifyProduct/{id}")]
+        public async Task<IActionResult> ModifyProduct(int id, ModifyProductDTO modifyProductDTO)
         {
-            var result = await _productsRepository.ModifyProduct(id, productDTO);
+            var result = await _productsRepository.ModifyProduct(id, modifyProductDTO);
             if (result is NotFoundResult)
             {
                 return NotFound();

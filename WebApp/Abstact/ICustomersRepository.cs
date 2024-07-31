@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.API.DTOs;
 using WebApp.API.Models;
 
 namespace WebApp.API.Abstract
@@ -10,5 +11,6 @@ namespace WebApp.API.Abstract
         Task<IActionResult> DeleteCustomer(int id);
         Task<IActionResult> DeleteAllCustomers();
         Task<List<API.Models.Customer>> GetCustomers();
+        Task<IActionResult> ModifyCustomer(int id, CustomerDTO customerDTO);
     }
 }

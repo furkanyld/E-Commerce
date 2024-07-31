@@ -1,7 +1,11 @@
-﻿using Bogus;
+﻿using AutoMapper;
+using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApp.API.Abstract;
+using WebApp.API.Concrete;
+using WebApp.API.DTOs;
 using WebApp.API.Models;
 
 namespace WebApp.API.Controllers
@@ -11,9 +15,13 @@ namespace WebApp.API.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ECommerceDbContext _context;
-        public CustomersController(ECommerceDbContext context)
+        private readonly ICustomersRepository _customersRepository;
+        private readonly IMapper _mapper;
+        public CustomersController(ECommerceDbContext context, ICustomersRepository customerRepository, IMapper mapper)
         {
             _context = context;
+            _customersRepository = customerRepository;
+            _mapper = mapper;
         }
         //private List<Customer> _customers = FakeData.FakeData.GetCustomers(200);
         [HttpPost("GenerateCustomers")]
@@ -79,5 +87,11 @@ namespace WebApp.API.Controllers
             return await customerList;
         }
 
+        [HttpPut("ModifyCustomer/{id}")]
+        public async Task<IActionResult> ModifyCustomer(int id, CustomerDTO customerDTO)
+        {
+            var result = await _customersRepository.ModifyCustomer(id, customerDTO);
+            return NoContent();
+        }
     }
 }

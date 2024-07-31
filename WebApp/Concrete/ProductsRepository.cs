@@ -21,7 +21,7 @@ namespace WebApp.API.Concrete
             _mapper = mapper;
         }
 
-        public async Task<API.Models.Product> CreateProduct(API.Models.Product product)
+        public async Task<API.Models.Product> CreateProduct(Product product)
         {
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
@@ -46,12 +46,8 @@ namespace WebApp.API.Concrete
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<IActionResult> ModifyProduct(int id, ProductDTO productDTO)
+        public async Task<IActionResult> ModifyProduct(int id, ModifyProductDTO modifyProductDTO)
         {
-            if (id != productDTO.Id)
-            {
-                return new BadRequestObjectResult("Product ID mismatch.");
-            }
 
             var existingProduct = await _context.Products.FindAsync(id);
             if (existingProduct == null)
@@ -59,7 +55,7 @@ namespace WebApp.API.Concrete
                 return new NotFoundResult();
             }
 
-            _mapper.Map(productDTO, existingProduct);
+            _mapper.Map(modifyProductDTO, existingProduct);
 
             try
             {

@@ -11,4 +11,10 @@
         public string Category { get; set; }
         public string Manufacturer { get; set; }
     }
+    public class ModifyProductDTO
+    {
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public double Discount { get; set; }
+    }
 }
