@@ -18,12 +18,11 @@ namespace WebApp.API.Concrete
             _context = context;
         }
 
-        //add değil addasync
-        public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
+        public async Task<Customer> CreateCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
+            await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
-            return new CreatedAtActionResult(nameof(CreateCustomer), "Customers", new { id = customer.Id }, customer);
+            return customer;
         }
 
         public async Task<IActionResult> DeleteAllCustomers()
