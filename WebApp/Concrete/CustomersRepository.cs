@@ -42,29 +42,29 @@ namespace WebApp.API.Concrete
             return new OkObjectResult(new { Message = "All customers have been deleted." });
         }
 
-        public IActionResult DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = _context.Customers.Find(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return new NotFoundObjectResult(new { Message = $"Customer with Id = {id} not found." });
             }
 
             _context.Customers.Remove(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return new OkObjectResult(new { Message = $"Customer with Id = {id} has been deleted." });
         }
 
-        public IActionResult GenerateCustomers(int number)
+        public async Task<IActionResult> GenerateCustomers(int number)
         {
             List<Customer> _customers = new Faker<Customer>()
                 .RuleFor(c => c.FirstName, f => f.Name.FirstName())
                 .RuleFor(c => c.LastName, f => f.Name.LastName())
                 .Generate(number);
 
-            _customers.ForEach(c => _context.Customers.Add(c));
-            _context.SaveChanges();
+            _customers.ForEach(c => _context.Customers.AddAsync(c));
+            await _context.SaveChangesAsync();
 
             return new OkObjectResult(_customers);
         }
