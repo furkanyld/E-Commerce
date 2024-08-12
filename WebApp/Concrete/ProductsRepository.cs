@@ -46,33 +46,18 @@ namespace WebApp.API.Concrete
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<IActionResult> ModifyProduct(int id, ModifyProductDTO modifyProductDTO)
+        public async Task<ModifyProductDTO> ModifyProduct(int id, ModifyProductDTO modifyProductDTO)
         {
-
             var existingProduct = await _context.Products.FindAsync(id);
             if (existingProduct == null)
             {
-                return new NotFoundResult();
+                throw new Exception();
             }
 
             _mapper.Map(modifyProductDTO, existingProduct);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return new NotFoundResult();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return new NoContentResult();
+            return modifyProductDTO;
         }
 
         private bool ProductExists(int id)
@@ -80,18 +65,18 @@ namespace WebApp.API.Concrete
             return _context.Products.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<Product> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
-                return new NotFoundResult();
+                throw new Exception();
             }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return new NoContentResult();
+            return product;
         }
 
         public async Task<IEnumerable<API.Models.Product>> SearchProducts([FromQuery] string query)

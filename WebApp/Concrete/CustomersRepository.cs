@@ -46,21 +46,21 @@ namespace WebApp.API.Concrete
             return new OkObjectResult(new { Message = "All customers have been deleted." });
         }
 
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<Customer> DeleteCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
-                return new NotFoundObjectResult(new { Message = $"Customer with Id = {id} not found." });
+                throw new Exception();
             }
 
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
 
-            return new OkObjectResult(new { Message = $"Customer with Id = {id} has been deleted." });
+            return customer;
         }
 
-        public async Task<IActionResult> GenerateCustomers(int number)
+        public async Task<List<Customer>> GenerateCustomers(int number)
         {
             List<Customer> _customers = new Faker<Customer>()
                 .RuleFor(c => c.FirstName, f => f.Name.FirstName())
@@ -70,25 +70,25 @@ namespace WebApp.API.Concrete
             _customers.ForEach(c => _context.Customers.AddAsync(c));
             await _context.SaveChangesAsync();
 
-            return new OkObjectResult(_customers);
+            return _customers;
         }
 
         public async Task<List<API.Models.Customer>> GetCustomers()
         {
             return await _context.Customers.ToListAsync();
         }
-        public async Task<IActionResult> ModifyCustomer(int id, CustomerDTO customerDTO)
+        public async Task<Customer> ModifyCustomer(int id, CustomerDTO customerDTO)
         {
             var existingCustomer = await _context.Customers.FindAsync(id);
             if (existingCustomer == null)
             {
-                return new NotFoundResult();
+                throw new Exception();
             }
 
             _mapper.Map(customerDTO, existingCustomer);
             await _context.SaveChangesAsync();
             
-            return new NoContentResult();
+            return existingCustomer;
         }
     }
 }

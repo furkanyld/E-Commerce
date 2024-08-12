@@ -6,11 +6,11 @@ namespace WebApp.API.Abstract
 {
     public interface ICustomersRepository
     {
-        Task<IActionResult> GenerateCustomers(int number);
+        Task<List<Customer>> GenerateCustomers(int number);
         Task<Customer> CreateCustomer(Customer customer);
-        Task<IActionResult> DeleteCustomer(int id);
+        Task<Customer> DeleteCustomer(int id);
         Task<IActionResult> DeleteAllCustomers();
         Task<List<API.Models.Customer>> GetCustomers();
-        Task<IActionResult> ModifyCustomer(int id, CustomerDTO customerDTO);
+        Task<Customer> ModifyCustomer(int id, CustomerDTO customerDTO);
     }
 }

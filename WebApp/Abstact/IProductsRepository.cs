@@ -11,8 +11,8 @@ namespace WebApp.API.Abstract
         Task<Product> CreateProduct(Product product);
         Task<Product> GetProductById(int id);
         Task<List<Product>> GetProducts();
-        Task<IActionResult> ModifyProduct(int id, ModifyProductDTO modifyProductDTO);
-        Task<IActionResult> DeleteProduct(int id);
+        Task<ModifyProductDTO> ModifyProduct(int id, ModifyProductDTO modifyProductDTO);
+        Task<Product> DeleteProduct(int id);
         Task<IEnumerable<Product>> SearchProducts([FromQuery] string query);
     }
 }
